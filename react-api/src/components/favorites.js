@@ -39,9 +39,8 @@ const Favorites = (props) => {
     var clickIndex = -1;
     //var userFavorites = props.login.favorite_list;
     var isFav = false;
-    //myFavorites = props.test.favorite_list;
-    myFavorites = [1,2,3];
-    console.log(props.test);
+    //myFavorites = [2,4,6];
+    myFavorites = props.login.favorite_list;
     for (let i = 0; i < props.properties.length; i++) {
         //for(let property of props.properties) {
         var property = props.properties[i];
@@ -54,6 +53,7 @@ const Favorites = (props) => {
             }
         }
         if (!isFav){
+            clickIndex+=1;
             continue;
         }
 

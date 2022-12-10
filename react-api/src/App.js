@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {Component, useState, useEffect, useRef} from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Properties from './components/properties';
@@ -45,6 +45,8 @@ function FilterableFavoritesList(props) {
         <div>
             <Favorites
                 properties={props.properties}
+                login={props.login}
+                users={props.users}
                 filterText={filterText} />
         </div>
     );
@@ -69,7 +71,7 @@ function App() {
                 setProperties(data)
             })
             .catch(console.log)
-    });
+    },[]);
 
     const [users, setUsers] = useState([]);
 
@@ -80,18 +82,25 @@ function App() {
                 setUsers(data)
             })
             .catch(console.log)
-    });
-    /*
+    },[]);
+
+    const isInitialMount = useRef(true);
+
     const [login, setLogin] = useState([]);
     useEffect( () => {
-        fetch('/login')
-            .then(res => res.json())
-            .then((data) => {
-                setLogin(data)
-            })
-            .catch(console.log)
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+        }else{
+            fetch('/users?uid=5')
+                .then(res => res.json())
+                .then((data) => {
+                    setLogin(data)
+                })
+                .catch(console.log);
+        }
     });
-    */
+
+
     const [test, setTest] = useState([]);
 
     useEffect( () => {
@@ -101,14 +110,14 @@ function App() {
                 setTest(data)
             })
             .catch(console.log)
-    });
+    },[]);
 
     return(
         //<FilterablePropertiesList properties={properties} />
             <Router>
                 <Routes>
                     <Route exact path='/' element={<FilterablePropertiesList properties={properties} />} />
-                    <Route path='/favorites' element={<FilterableFavoritesList  properties={properties} users={users} test={test} />} />
+                    <Route path='/favorites' element={<FilterableFavoritesList  properties={properties} login={login} users={users} test={test} />} />
                 </Routes>
             </Router>
     );
