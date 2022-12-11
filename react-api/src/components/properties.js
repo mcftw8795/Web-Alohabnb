@@ -27,6 +27,9 @@ const Properties = (props) => {
         myFavorites.push(pid);
         //console.log(myFavorites);
     }
+	function reserve(pid) {
+		//window.location.href="http://localhost:3000/newReservation/"+pid;
+	}
 
     //build list
     const list=[];
@@ -184,6 +187,7 @@ const Properties = (props) => {
                         </div>
                         <button type="submit" className="btn btn-primary">Submit</button>
                         <button type="submit" className="btn btn-primary" onClick={addFavorites(property.id)}>Add to Favorites</button>
+						<button type="button" class="btn btn-primary" onClick={reserve(property.pid)}>Back to Main Page</button>
                         <br/>
                         <br/>
                         <button type="button" class="backButton" onClick={returnToMainPage}>Back to Main Page</button>
