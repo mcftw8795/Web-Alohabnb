@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect, useRef} from 'react';
+import React, {Component, useState, useEffect, useRef, useCallback} from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Properties from './components/properties';
@@ -63,8 +63,9 @@ function FilterableFavoritesList(props) {
 function App() {
 
     const [properties, setProperties] = useState([]);
-    
+    const isInitialMount = useRef(true);
     useEffect( () => {
+        //isInitialMount.current = true;
         fetch('/properties2')
             .then(res => res.json())
             .then((data) => {
@@ -83,9 +84,7 @@ function App() {
             })
             .catch(console.log)
     },[]);
-
-    const isInitialMount = useRef(true);
-
+    /*
     const [login, setLogin] = useState([]);
     useEffect( () => {
         if (isInitialMount.current) {
@@ -98,16 +97,14 @@ function App() {
                 })
                 .catch(console.log);
         }
-    });
-
-
-    const [test, setTest] = useState([]);
-
+    },[]);
+    */
+    const [login, setLogin] = useState([]);
     useEffect( () => {
-        fetch('/test')
+        fetch('/users?uid=5')
             .then(res => res.json())
             .then((data) => {
-                setTest(data)
+                setLogin(data)
             })
             .catch(console.log)
     },[]);
@@ -117,7 +114,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route exact path='/' element={<FilterablePropertiesList properties={properties} />} />
-                    <Route path='/favorites' element={<FilterableFavoritesList  properties={properties} login={login} users={users} test={test} />} />
+                    <Route path='/favorites' element={<FilterableFavoritesList  properties={properties} login={login} users={users} />} />
                 </Routes>
             </Router>
     );

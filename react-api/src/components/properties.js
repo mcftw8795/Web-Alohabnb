@@ -1,5 +1,6 @@
 import React from 'react'
 import {useState} from "react";
+import { CommentSection } from 'react-comments-section';
 
 // index for which property to show
 var toShow = 0;
@@ -27,6 +28,10 @@ const Properties = (props) => {
         myFavorites.push(pid);
         //console.log(myFavorites);
     }
+    function addComment(){
+
+    }
+
 
     //build list
     const list=[];
@@ -182,7 +187,7 @@ const Properties = (props) => {
                             <label htmlFor="exampleFormControlTextarea1">Add Comment</label>
                             <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
-                        <button type="submit" className="btn btn-primary">Submit</button>
+                        <button type="submit" className="btn btn-primary" onClick={returnToMainPage}>Submit</button>
                         <button type="submit" className="btn btn-primary" onClick={addFavorites(property.id)}>Add to Favorites</button>
                         <br/>
                         <br/>
