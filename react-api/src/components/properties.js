@@ -1,11 +1,12 @@
 import React from 'react'
 import {useState} from "react";
-import { CommentSection } from 'react-comments-section';
+import axios from 'axios';
 
 // index for which property to show
 var toShow = 0;
 // functions for Onclick Event Handler
 var onClickHandlers = [];
+var onClickHandlersFav = [];
 
 const Properties = (props) => {
     ///
@@ -23,13 +24,30 @@ const Properties = (props) => {
     for (var j = 0; j < props.properties.length; j++) {
         onClickHandlers[j] = showDetail.bind(this, j);
     }
-    function addFavorites(pid) {
-        const myFavorites = [1,2,3];
-        myFavorites.push(pid);
-        //console.log(myFavorites);
+    for (var j = 0; j < props.properties.length; j++) {
+        onClickHandlersFav[j] = addFavorites.bind(this, j);
     }
-    function addComment(){
+    function addFavorites(i){
+        const Favorites = [4,5,6];
+        var property = (props.properties[i]);
+        var propertyStr = String(JSON.stringify(property));
+        var pidIndex = propertyStr.indexOf("\"pid\":") + 6;
+        var pid = parseInt(propertyStr[pidIndex]);
 
+        var users = props.users;
+        Favorites.push(pid);
+        const newFavorites = [...new Set(Favorites)];
+        const updated_user = {
+            _id:"6379ab58d4940c51148c6da6",
+            uid:5,
+            username:"besthostever",
+            password:"slkdfj9w20",
+            is_host:true,
+            owned_properties:[4,5,6],
+            favorite_list: newFavorites
+        }
+        console.log(pid);
+        console.log(updated_user);
     }
 
 
@@ -52,7 +70,7 @@ const Properties = (props) => {
             ) == -1)
         )
             continue;
-
+        console.log(property.pid)
         // index number for onClick handler
         clickIndex += 1;
 
@@ -83,6 +101,7 @@ const Properties = (props) => {
 
                 <div className="card-body">
                     <h5 className="pointer" onClick={onClickHandlers[clickIndex]}>{property.title}</h5>
+                    <button type="submit" className="btn btn-primary" onClick={onClickHandlersFav[clickIndex]}>Add to Favorites</button>
                     <p className="card-text">{property.location}</p>
                     <p className="card-text">{property.bedrooms}-bedroom</p>
                     <p className="card-text">${property.nightly_fee + property.cleaning_fee + property.service_fee}/night</p>
@@ -188,7 +207,7 @@ const Properties = (props) => {
                             <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                         <button type="submit" className="btn btn-primary" onClick={returnToMainPage}>Submit</button>
-                        <button type="submit" className="btn btn-primary" onClick={addFavorites(property.id)}>Add to Favorites</button>
+                        <button type="submit" className="btn btn-primary" onClick={addFavorites(property.favorite_list)}>Add to Favorites</button>
                         <br/>
                         <br/>
                         <button type="button" class="backButton" onClick={returnToMainPage}>Back to Main Page</button>

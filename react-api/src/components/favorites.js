@@ -56,7 +56,6 @@ const Favorites = (props) => {
             clickIndex+=1;
             continue;
         }
-
         // index number for onClick handler
         clickIndex += 1;
 

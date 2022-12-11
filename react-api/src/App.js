@@ -25,6 +25,8 @@ function FilterablePropertiesList(props) {
         <div>
             <Properties
                 properties={props.properties}
+                login={props.login}
+                users={props.users}
                 filterText={filterText} />
         </div>
     );
@@ -113,7 +115,7 @@ function App() {
         //<FilterablePropertiesList properties={properties} />
             <Router>
                 <Routes>
-                    <Route exact path='/' element={<FilterablePropertiesList properties={properties} />} />
+                    <Route exact path='/' element={<FilterablePropertiesList properties={properties} login={login} users={users} />} />
                     <Route path='/favorites' element={<FilterableFavoritesList  properties={properties} login={login} users={users} />} />
                 </Routes>
             </Router>
