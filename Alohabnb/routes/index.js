@@ -15,6 +15,10 @@ router.get('/', function(req, res) {
 	res.render('index', { title: 'Express'} );
 });
 
+router.get('/logged', function(req, res) {
+	res.render('index2', { title: 'Express'} );
+});
+
 router.get('/login', function(req, res) {
 	res.render('login');
 
@@ -25,9 +29,29 @@ router.get('/register', function(req, res) {
 
 });
 
-router.get('/favorites', function(req, res) {
-	res.render('favorites');
+router.get('/reservationsList/:uid', function(req, res) {
+	var collection = db.get('reservations');
+    var uid = req.params.uid;
+	
+    if (uid !== undefined){
+		const results_from_mongo = [];
 
+		collection.find({uid : Number(uid)}, {sort: {start_date: 1}})
+			.each(function(doc){
+				results_from_mongo.push(doc);
+			})
+			.then(function(){
+				res.render('reservationsList', {"results": results_from_mongo });
+			});
+    }
+});
+
+router.get('/newReservation/:pid', function(req, res) {
+	var pid = req.params.pid;
+	
+	if (pid !== undefined){
+		res.render('newReservation', {"pid" : req.params.pid});
+	}
 });
 
 //protected route
@@ -39,62 +63,6 @@ router.get('/favorites', function(req, res) {
 router.get('/welcome', function(req, res) {
 	res.render('welcome');
 
-});
-// get properties
-router.get('/properties2', function(req, res) {
-	var collection = db.get('properties');
-	if (req.query.pid === undefined){
-		collection.find({}, function(err, properties){
-			if (err) throw err;
-			res.json(properties);
-		});
-	}
-	else{
-		collection.findOne({ pid: Number(req.query.pid) }, function(err, property){
-			if (err) throw err;
-			res.json(property);
-		});
-	}
-});
-//get users
-router.get('/users', function(req, res) {
-	var collection = db.get('users');
-	if (req.query.uid === undefined){
-		collection.find({}, function(err, user){
-			if (err) throw err;
-			res.json(user);
-		});
-	}
-	else{
-		collection.findOne({ uid: Number(req.query.uid) }, function(err, user){
-			if (err) throw err;
-			res.json(user);
-		});
-	}
-});
-// get login user
-router.get('/login_user', function(req, res) {
-	res.json({
-		uid: 2,
-		favorite_list: [1, 2]
-	});
-});
-//get test
-// get properties
-router.get('/test', function(req, res) {
-	var collection = db.get('test');
-	if (req.query.pid === undefined){
-		collection.find({}, function(err, test){
-			if (err) throw err;
-			res.json(test);
-		});
-	}
-	else{
-		collection.findOne({ pid: Number(req.query.pid) }, function(err, test){
-			if (err) throw err;
-			res.json(test);
-		});
-	}
 });
 
 
@@ -194,7 +162,46 @@ router.post('/login', function(req, res) {
 
 });
 
+// get properties
+router.get('/properties2', function(req, res) {
+	var collection = db.get('properties');
+	if (req.query.pid === undefined){
+		collection.find({}, function(err, properties){
+			if (err) throw err;
+			res.json(properties);
+		});
+	}
+	else{
+		collection.findOne({ pid: Number(req.query.pid) }, function(err, property){
+			if (err) throw err;
+			res.json(property);
+		});
+	}
+});
 
-
+// get login user
+router.get('/login_user', function(req, res) {
+	res.json({
+		uid: 2,
+		favorite_list: [1, 2]
+	});
+});
+//get test
+// get properties
+router.get('/test', function(req, res) {
+	var collection = db.get('test');
+	if (req.query.pid === undefined){
+		collection.find({}, function(err, test){
+			if (err) throw err;
+			res.json(test);
+		});
+	}
+	else{
+		collection.findOne({ pid: Number(req.query.pid) }, function(err, test){
+			if (err) throw err;
+			res.json(test);
+		});
+	}
+});
 
 module.exports = router;
